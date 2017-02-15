@@ -1,2 +1,7 @@
 scipy
 tensorflow
+numpy
+matplotlib
+sklearn
+h5py
+
