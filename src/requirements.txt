@@ -1,7 +1,8 @@
 scipy
-tensorflow
+#tensorflow
+# please see https://www.tensorflow.org/get_started/os_setup#pip_installation about installing tensorflow-gpu
 numpy
 matplotlib
 sklearn
 h5py
-
+pillow
