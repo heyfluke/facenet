@@ -25,14 +25,12 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import time
+import time, os, sys
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from PIL import Image
 import numpy as np
 
-import sys
-# print (sys.path)
 sys.path.append('..')
 
 import tensorflow as tf
@@ -113,7 +111,15 @@ def main():
             else:
                 print ('#%d part time %.3lf' % (i, e[i]-s))
 
-    plt.show()
+    havedisplay = "DISPLAY" in os.environ
+    if not havedisplay:
+        import uuid
+        filename = '/tmp/%s.png' %(uuid.uuid4())
+        print ('because no display detected, save plot to %s' % (filename))
+        fig.savefig(filename)
+    else:
+        plt.show()
+    
     
 
 if __name__ == '__main__':
