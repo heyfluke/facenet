@@ -26,6 +26,10 @@ from __future__ import division
 from __future__ import print_function
 
 import time, os, sys
+havedisplay = "DISPLAY" in os.environ
+if not havedisplay:
+    import matplotlib
+    matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from PIL import Image
@@ -111,7 +115,6 @@ def main():
             else:
                 print ('#%d part time %.3lf' % (i, e[i]-s))
 
-    havedisplay = "DISPLAY" in os.environ
     if not havedisplay:
         import uuid
         filename = '/tmp/%s.png' %(uuid.uuid4())
