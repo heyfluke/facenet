@@ -33,6 +33,10 @@ import tensorflow as tf
 from tensorflow.python.framework import ops
 import numpy as np
 from scipy import misc
+havedisplay = "DISPLAY" in os.environ
+if not havedisplay:
+    import matplotlib
+    matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from sklearn.cross_validation import KFold
 from scipy import interpolate
@@ -436,7 +440,13 @@ def plot_roc(fpr, tpr, label):
     plt.legend()
     plt.plot([0, 1], [0, 1], 'g--')
     plt.grid(True)
-    plt.show()
+    if not havedisplay:
+        import uuid
+        filename = '/tmp/%s.png' %(uuid.uuid4())
+        print ('because no display detected, save plot to %s' % (filename))
+        plt.savefig(filename)
+    else:
+        plt.show()
   
 def calculate_val(thresholds, embeddings1, embeddings2, actual_issame, far_target, nrof_folds=10):
     assert(embeddings1.shape[0] == embeddings2.shape[0])
