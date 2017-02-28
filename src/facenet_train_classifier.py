@@ -120,11 +120,15 @@ def main(args):
             images = []
             for filename in tf.unpack(filenames):
                 file_contents = tf.read_file(filename)
-                image = tf.image.decode_png(file_contents)
+                image = tf.image.decode_png(file_contents, channels=3)
+                s = tf.shape(image)
+                if args.image_size:
+                    if s[0] != args.image_size or s[1] != args.image_size:
+                        image = tf.image.resize_images(image, [args.image_size, args.image_size])
                 if args.random_rotate:
                     image = tf.py_func(facenet.random_rotate_image, [image], tf.uint8)
                 if args.random_crop:
-                    image = tf.random_crop(image, [args.image_size, args.image_size, 3])
+                    image = tf.random_crop(image, [args.image_size, args.image_size, s[2]])
                 else:
                     image = tf.image.resize_image_with_crop_or_pad(image, args.image_size, args.image_size)
                 if args.random_flip:
@@ -327,6 +331,7 @@ def evaluate(sess, enqueue_op, image_paths_placeholder, labels_placeholder, phas
     #pylint: disable=maybe-no-member
     summary.value.add(tag='lfw/accuracy', simple_value=np.mean(accuracy))
     summary.value.add(tag='lfw/val_rate', simple_value=val)
+    summary.value.add(tag='lfw/far', simple_value=far)
     summary.value.add(tag='time/lfw', simple_value=lfw_time)
     summary_writer.add_summary(summary, step)
     with open(os.path.join(log_dir,'lfw_result.txt'),'at') as f:

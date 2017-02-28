@@ -379,6 +379,7 @@ def evaluate(sess, image_paths, embeddings, labels_batch, image_paths_placeholde
     #pylint: disable=maybe-no-member
     summary.value.add(tag='lfw/accuracy', simple_value=np.mean(accuracy))
     summary.value.add(tag='lfw/val_rate', simple_value=val)
+    summary.value.add(tag='lfw/far', simple_value=far)
     summary.value.add(tag='time/lfw', simple_value=lfw_time)
     summary_writer.add_summary(summary, step)
     with open(os.path.join(log_dir,'lfw_result.txt'),'at') as f:
