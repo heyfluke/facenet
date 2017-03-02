@@ -101,10 +101,14 @@ def main(args):
             images = []
             for filename in tf.unpack(filenames):
                 file_contents = tf.read_file(filename)
-                image = tf.image.decode_png(file_contents)
-                
+                image = tf.image.decode_png(file_contents, channels=3)
+                s = tf.shape(image)
+                if args.image_size:
+                    if s[0] != args.image_size or s[1] != args.image_size:
+                        image = tf.image.resize_images(image, [args.image_size, args.image_size])
+
                 if args.random_crop:
-                    image = tf.random_crop(image, [args.image_size, args.image_size, 3])
+                    image = tf.random_crop(image, [args.image_size, args.image_size, s[2]])
                 else:
                     image = tf.image.resize_image_with_crop_or_pad(image, args.image_size, args.image_size)
                 if args.random_flip:
